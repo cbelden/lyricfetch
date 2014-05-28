@@ -9,6 +9,6 @@ setup(name='LyricFetch',
       author='Cal Belden',
       author_email='calvinbelden@gmail.com',
       packages=['lyricfetch'],
-      requires=['beautifulsoup4==4.3.2',
-                'requests==2.3.0',
-                'wsgiref==0.1.2'])
+      requires=['beautifulsoup4 (==4.3.2)',
+                'requests (==2.3.0)',
+                'wsgiref (==0.1.2)'])
