@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 
 
@@ -74,8 +75,14 @@ class LyricClient():
 
             # Append content if there is no tag (ie. the element is plain text)
             if not tag:
+
+                # Skip line if it's contained in brackets
+                if re.match('\[.+\]', content):
+                    continue
+
                 lyrics += content + '\n'
 
+            # Update the last seen tag
             last_tag = tag
 
         return lyrics
