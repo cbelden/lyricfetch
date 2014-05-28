@@ -38,7 +38,47 @@ class LyricClient():
 
     def _extract_lyrics(self, lyric_url):
         """Extracts the lyrics from a Lyric Wikia lyrics page."""
-        pass
+
+        # Parse lyric url response
+        r = requests.get(lyric_url)
+        soup = BeautifulSoup(r.text)
+
+        # Locate div that stores the lyrics
+        lyricbox = soup.find(class_='lyricbox')
+
+        # Extract and store lyrics
+        lyrics = ''
+        last_tag = None
+
+        for content in lyricbox.contents:
+
+            # Within the lyricbox, the first element(s) consist of an ad contained within
+            # a div. Additionally, each line from the lyrics is split by a <br> block. To
+            # boot, after the last lyric line, there is a <p> block with some metrics.
+            # The div and br blocks have non-None .name values, but both the NavigableText
+            # and the <p> tags both have None values for the .name attribute.
+            #
+            # The following works by assuming that the first non-lyric elements will return
+            # a non-None value for name, and the lyrics (text) will always return None. The
+            # only time two consecutive None values will occur after the last lyric has been
+            # read and the current element is the non-important <p> block. We can break at
+            # this point.
+            # TODO: follow up with this: if we can get the <p> block to have a non-None
+            # .name attribute, we can clean this up quite a bit.
+
+            tag = content.name
+
+            # If last two tags are None, assume we've read all the lyrics
+            if not tag and not last_tag:
+                break
+
+            # Append content if there is no tag (ie. the element is plain text)
+            if not tag:
+                lyrics += content + '\n'
+
+            last_tag = tag
+
+        return lyrics
 
     def get_lyrics(self, artist, title):
         """Retrieves the lyrics for a given song using the Lyric Wikia website."""
@@ -56,4 +96,4 @@ class LyricClient():
 if __name__ == '__main__':
 
     client = LyricClient()
-    print client._get_lyric_url('mumford and sons', 'after the storm')
+    print client.get_lyrics('Drake', 'Marvins room')
