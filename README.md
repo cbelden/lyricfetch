@@ -28,6 +28,8 @@ At this time some other dependencies will also be installed (listed in requireme
     >>> from lyricfetch import LyricClient
     >>> client = LyricClient()
     >>> client.get_lyrics('Drake', 'Marvins room')
-    u'[Intro: Woman on phone]\nHello? ...more depressing lyrics
+    u'Hello? Yeah I just walked in.
+    Yeah I'm good... you still working?
+    Tonight, right now? Did I go out? Yeah... etc. etc.
 
 And that's it! Now you can quickly get the lyrics to your favorite sad Drake songs. Enjoy or cry or whatever.
