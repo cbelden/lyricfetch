@@ -20,7 +20,7 @@ class LyricClient():
         except Exception, e:
             raise e
 
-        # Return None if lyric request failed
+        # Return empty string if lyric request failed
         if r.status_code is not 200:
             return None
 
@@ -46,6 +46,10 @@ class LyricClient():
 
         # Locate div that stores the lyrics
         lyricbox = soup.find(class_='lyricbox')
+
+        # Return empty string if they lyrics are missing
+        if not lyricbox:
+            return ''
 
         # Extract and store lyrics
         lyrics = ''
