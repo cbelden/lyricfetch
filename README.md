@@ -3,6 +3,8 @@
 ##About
 The lyricfetch Python package retrieves the full lyrics for a song using the Lyric Wikia web service. The main class in lyricfetch, LyricClient, exposes a single method, .get_lyrics(artist, title). In the project root, I've created fetch_some_lyrics.py to illustrate how to use the package. Check out the installation instructions below to get started!
 
+Note: this ish is currently an alpha release (i.e. ready for testing, but no testing has been completed).
+
 
 ##Installing (Mac OS X)
 The following instructions describe how to install lyricfetch in a virtual environment. For more
