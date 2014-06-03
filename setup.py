@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 
-setup(name='LyricFetch',
+setup(name='lyricfetch',
       version='1.0',
       description='Lyric Fetcher Tool',
       author='Cal Belden',
