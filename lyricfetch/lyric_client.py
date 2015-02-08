@@ -1,6 +1,6 @@
 import requests
 import re
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 
 
 class LyricClient():
@@ -51,31 +51,18 @@ class LyricClient():
         if not lyricbox:
             return ''
 
+        # Remove "NewPP limit report" from wiki sites and other HTML comments
+        [s.extract() for s in lyricbox(text=lambda text: isinstance(text, Comment))]
+
+        # Remove all script elements
+        [s.extract() for s in lyricbox('script')]
+
         # Extract and store lyrics
         lyrics = ''
-        last_tag = None
 
         for content in lyricbox.contents:
 
-            # Within the lyricbox, the first element(s) consist of an ad contained within
-            # a div. Additionally, each line from the lyrics is split by a <br> block. To
-            # boot, after the last lyric line, there is a <p> block with some metrics.
-            # The div and br blocks have non-None .name values, but both the NavigableText
-            # and the <p> tags both have None values for the .name attribute.
-            #
-            # The following works by assuming that the first non-lyric elements will return
-            # a non-None value for name, and the lyrics (text) will always return None. The
-            # only time two consecutive None values will occur after the last lyric has been
-            # read and the current element is the non-important <p> block. We can break at
-            # this point.
-            # TODO: follow up with this: if we can get the <p> block to have a non-None
-            # .name attribute, we can clean this up quite a bit.
-
             tag = content.name
-
-            # If last two tags are None, assume we've read all the lyrics
-            if not tag and not last_tag:
-                break
 
             # Append content if there is no tag (ie. the element is plain text)
             if not tag:
@@ -85,9 +72,6 @@ class LyricClient():
                     continue
 
                 lyrics += content + '\n'
-
-            # Update the last seen tag
-            last_tag = tag
 
         return lyrics
 
